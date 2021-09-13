@@ -129,8 +129,6 @@ T CircularArray<T>::pop_back(){
         back=prev(back);
     }
 
-    cout<<"f b: "<<front<<" "<<back<<endl;
-
     return temp;
 }
 
