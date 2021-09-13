@@ -162,10 +162,10 @@ void CircularArray<T>::sort(){
 
     for (int i = 0; i < size()-1; i++){
         for (int j = 0; j < size()-i-1; j++){
-            if(array[(size()+front+j) % size()]>array[(size()+front+j+1) % size()]){
-                T temp=array[(size()+front+j) % size()];
-                array[(size()+front+j) % size()] = array[(size()+front+j+1) % size()];
-                array[(size()+front+j+1) % size()] = temp;
+            if(array[(front+j) % capacity]>array[(front+j+1) % capacity]){
+                T temp=array[(front+j) % capacity];
+                array[(front+j) % capacity] = array[(front+j+1) % capacity];
+                array[(front+j+1) % capacity] = temp;
             }
         }
     }   
