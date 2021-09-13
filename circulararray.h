@@ -34,6 +34,178 @@ private:
 };
 
 template <class T>
+void CircularArray<T>::push_back(T data){
+
+    if(front == -1 && back == -1){
+        front=0;
+        back=0;
+        array[back]=data;
+    }
+
+    else if(is_full()){
+        T *temp_array =  new T [capacity + 3];
+        int index=front;
+        for(int i=0;i<capacity;i++){
+            temp_array[i]=array[index];
+            index=next(index);
+        }
+        back = size()-1;
+        front = 0;
+        capacity+=3;
+
+        array=temp_array;
+
+        back=next(back);
+        array[back]=data;
+    }
+
+    else{
+        back=next(back);
+        array[back]=data;
+    }
+
+    return;
+}
+
+template <class T>
+void CircularArray<T>::push_front(T data){
+
+    if(front == -1 && back == -1){
+        front=0;
+        back=0;
+        array[back]=data;
+    }
+    
+    else if(is_full()){
+        T *temp_array =  new T [capacity + 3];
+        int index=front;
+        for(int i=0;i<capacity;i++){
+            temp_array[i]=array[index];
+            index=next(index);
+        }
+        back = size()-1;
+        front = 0;
+        capacity+=3;
+
+        array=temp_array;
+
+        front=prev(front);
+        array[front]=data;
+    }
+
+    else{
+        front=prev(front);
+        array[front]=data;
+    }
+
+    return;
+}
+
+template <class T>
+T CircularArray<T>::pop_front(){
+    T temp=array[front];
+
+    if(size() == 1){
+        front = back = -1;
+    }
+
+    else{
+        front=next(front);
+    }
+    
+    return temp;
+}
+
+template <class T>
+T CircularArray<T>::pop_back(){
+
+    T temp=array[back];
+
+    if(size() == 1){
+        front = back = -1;
+    }
+
+    else{
+        back=prev(back);
+    }
+
+    cout<<"f b: "<<front<<" "<<back<<endl;
+
+    return temp;
+}
+
+template <class T>
+bool CircularArray<T>::is_empty(){
+    if( front == -1 && back==-1){
+        return true;
+    }
+    return false;
+}
+
+template <class T>
+bool CircularArray<T>::is_full(){
+    return (back+1) % capacity == front;
+}
+
+template <class T>
+bool CircularArray<T>::is_sorted(){
+    int j=front;
+    for(int i=0;i<size();i++){
+        if(array[j]>next(array[j])){
+            return false;
+        }
+        j=next(j);
+    }
+    return true;
+}
+
+template <class T>
+void CircularArray<T>::sort(){
+
+    for (int i = 0; i < size()-1; i++){
+        for (int j = 0; j < size()-i-1; j++){
+            if(array[(size()+front+j) % size()]>array[(size()+front+j+1) % size()]){
+                T temp=array[(size()+front+j) % size()];
+                array[(size()+front+j) % size()] = array[(size()+front+j+1) % size()];
+                array[(size()+front+j+1) % size()] = temp;
+            }
+        }
+    }   
+}
+
+template <class T>
+void CircularArray<T>::reverse(){
+    T *temp_array=new T[capacity];
+    int f = front;
+    int b = back;
+    do{
+        temp_array[b]=array[f];
+        b=prev(b);
+        f=next(f);
+    }while(f != front);
+
+    array=temp_array;
+    return;
+}
+
+template <class T>
+int CircularArray<T>::size(){
+
+    if(front == -1 && back == -1){
+        return 0;
+    }
+
+    return front > back ? (capacity - front + back + 1) : (back - front + 1);
+}
+
+template <class T>
+T &CircularArray<T>::operator[](int index){
+    return (size()+front+index) % size();
+}
+
+/* los que vinieron */
+
+template <class T>
 CircularArray<T>::CircularArray()
 {
     CircularArray(0);
@@ -68,8 +240,11 @@ int CircularArray<T>::next(int index)
 template <class T>
 string CircularArray<T>::to_string(string sep)
 {
-    string result = ""; 
-    for (int i = 0; i < size(); i++)
-        result += std::to_string((*this)[i]) + sep;
+    string result = "";
+    int j=front;
+    for (int i = 0; i < size(); i++){
+        result += std::to_string(array[j]) + sep;
+        j = next(j);
+    }
     return result;    
 }
