@@ -34,6 +34,38 @@ private:
 };
 
 template <class T>
+void CircularArray<T>::insert(T data, int pos){
+    if(size()==capacity){
+        T *temp_array =  new T [capacity + 3];
+        int index=front;
+        for(int i=0;i<capacity;i++){
+            temp_array[i]=array[index];
+            index=next(index);
+        }
+        back = size()-1;
+        front = 0;
+        capacity+=3;
+
+        array=temp_array;
+    }
+
+    T *temp2_array =  new T [capacity];
+    int index2=front;
+    for(int i=0;i<pos;i++){
+        temp2_array[i]=array[(front+i) % capacity];
+        
+    }
+    for(int i=pos;i<capacity;i++){
+        temp2_array[i+1]=array[(front+i) % capacity];
+        
+    }
+    
+    back=next(back);
+    array=temp2_array;
+    array[(front+pos) % capacity] = data;
+}
+
+template <class T>
 void CircularArray<T>::push_back(T data){
 
     if(front == -1 && back == -1){
@@ -198,7 +230,7 @@ int CircularArray<T>::size(){
 
 template <class T>
 T &CircularArray<T>::operator[](int index){
-    return (size()+front+index) % size();
+    return array[(front+index) % capacity];
 }
 
 /* los que vinieron */
