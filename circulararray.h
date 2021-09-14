@@ -135,6 +135,11 @@ void CircularArray<T>::push_front(T data){
 
 template <class T>
 T CircularArray<T>::pop_front(){
+
+    if(size()==0){
+        return 0;
+    }
+
     T temp=array[front];
 
     if(size() == 1){
@@ -150,6 +155,10 @@ T CircularArray<T>::pop_front(){
 
 template <class T>
 T CircularArray<T>::pop_back(){
+
+    if(size()==0){
+        return 0;
+    }
 
     T temp=array[back];
 
